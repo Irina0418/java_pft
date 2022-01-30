@@ -12,10 +12,10 @@ public class MyFirstProgram{
 		System.out.println("Площадь прямоугольника  со сторонами "+ r.a +" и "+ r.b +" = "+ r.area());
 
 
-		Point p1=new Point(1,1);
+		Point p1 = new Point(1,1);
 		Point p2 = new Point(5,1);
-		double dist = Point.distance(p1, p2);
-		System.out.println("distance = "+ dist);
+
+		System.out.println("distance = "+ p1.distance(p2));
 	}
 
 }
