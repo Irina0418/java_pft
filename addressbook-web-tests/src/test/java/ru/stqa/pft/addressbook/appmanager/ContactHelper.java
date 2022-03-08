@@ -6,16 +6,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactDate;
-import ru.stqa.pft.addressbook.model.GroupDate;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class ContactHelper extends HelperBase{
-    //private WebDriver wd;
+
 
     public ContactHelper(WebDriver wd) {
-        //this.wd=wd;
         super(wd);
     }
 
@@ -38,17 +37,8 @@ public class ContactHelper extends HelperBase{
         }
     }
 
-    /*private void type(String firstname, String contactDate) {
-        wd.findElement(By.name(firstname)).click();
-        wd.findElement(By.name(firstname)).clear();
-        wd.findElement(By.name(firstname)).sendKeys(contactDate);
-    }*/
-
-
-    public void selectContact(int index) {
-        wd.findElements(By.name("selected[]")).get(index).click();
-       //click(By.name("selected[]"));
-        //  click(By.id("36"));
+     public void selectContactById(int id) {
+        wd.findElement(By.cssSelector("input[value='"+ id + "']")).click();
     }
 
     public void deleteSelectedContact() {
@@ -68,10 +58,25 @@ public class ContactHelper extends HelperBase{
     }
 
 
-    public void createContact(ContactDate contact) {
+    public void create(ContactDate contact) {
         gotoAddNew();
         fillContactForm(contact, true);
         saveAddress();
+        gotoHomePage();
+
+    }
+
+    public void modify(ContactDate contact) {
+        editContact();
+        fillContactForm(contact, false);
+        updateContact();
+        gotoHomePage();
+    }
+
+   public void delete(ContactDate contact) {
+        selectContactById(contact.getId());
+        deleteSelectedContact();
+        acceptDeleteContact();
         gotoHomePage();
 
     }
@@ -90,12 +95,14 @@ public class ContactHelper extends HelperBase{
 
     public boolean isThereAContact() {
         return isElementPresent(By.name("selected[]"));
-        //return isElementPresent(By.id("26"));
+
     }
 
-    public List<ContactDate> getContactList() {
 
-        List<ContactDate> contacts = new ArrayList<ContactDate>();
+
+
+    public Contacts all() {
+        Contacts contacts = new Contacts();
         WebElement table = wd.findElement(By.xpath("//table[@id='maintable']"));
         List<WebElement> rows;
         try {
@@ -121,5 +128,7 @@ public class ContactHelper extends HelperBase{
         }
         return contacts;
     }
+
+
 }
 

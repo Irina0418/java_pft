@@ -1,32 +1,33 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.GroupDate;
+import ru.stqa.pft.addressbook.model.Groups;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GroupCreationTests extends TestBase{
 
   @Test
   public void testGroupCreation() throws Exception {
-    app.getNavigationHelper().gotoGroupPage();
-    List<GroupDate> before = app.getGroupHelper().getGroupList();
-    GroupDate group= new GroupDate("test1", "test2", "test3");
-    app.getGroupHelper().createGroup(group);
-    List<GroupDate> after = app.getGroupHelper().getGroupList();
-    Assert.assertEquals(after.size(), before.size()+1);
+    app.goTo().groupPage();
+    Groups before = app.group().all();
+    GroupDate group= new GroupDate().withName("test1").withFooter("test2").withFooter("test3");
+    app.group().create(group);
+    Groups after = app.group().all();
+    //Assert.assertEquals(after.size(), before.size()+1);
+    assertThat(after.size(), equalTo(before.size()+1));
 
-    //Comparator<? super GroupDate> byId= (Comparator<GroupDate>) (o1, o2) -> Integer.compare(o1.getId(), o2.getId());
-    //int max1= after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId();
-    //group.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
+
+   /* group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt());
     before.add(group);
     Comparator<? super GroupDate> byId=(g1,g2) -> Integer.compare(g1.getId(), g2.getId());
     before.sort(byId);
     after.sort(byId);
-    Assert.assertEquals(before, after);
+    Assert.assertEquals(before, after);*/
+    assertThat(after, equalTo(
+            before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
   }
 
 
