@@ -25,12 +25,14 @@ public class ContactCreationTests extends TestBase{
     Thread.sleep(2000);
     app.goTo().gotoHomePage();
     Contacts before = app.contact().all();
-    ContactDate contact = new ContactDate("Ivan", "Ivanov", "Kazan", null, "89628282828", "ivan@gmail.com", "test3");
+    ContactDate contact = new ContactDate().withFirstname("Ivan").withLastname("Ivanov").withAddress("Kazan")
+            .withMobile("89628282828").withEmail("ivan@gmail.com").withGroup("test3");
     app.goTo().gotoAddNew();
     app.contact().create(contact);
     app.goTo().gotoHomePage();
+    assertThat(app.contact().count(), equalTo(before.size()+1));
     Contacts after = app.contact().all();
-    Assert.assertEquals(after.size(), before.size()+1);
+   // Assert.assertEquals(after.size(), before.size()+1);
 
    // contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt());
    // before.add(contact);
