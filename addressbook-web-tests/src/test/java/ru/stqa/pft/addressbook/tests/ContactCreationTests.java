@@ -4,17 +4,28 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactDate;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupDate;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase{
 
+  @BeforeMethod
+  public void ensurePrecondition() {
+    app.goTo().groupPage();
+    if (app.group().all().size() == 0) {
+      app.group().create(new GroupDate().withName("test1"));
+
+    }
+  }
+
   @Test
   public void testContactCreation() throws Exception {
+    Thread.sleep(2000);
     app.goTo().gotoHomePage();
     Contacts before = app.contact().all();
-    ContactDate contact = new ContactDate("Ivan", "Ivanov", "Kazan", null, "89628282828", "ivan@gmail.com", "test1");
+    ContactDate contact = new ContactDate("Ivan", "Ivanov", "Kazan", null, "89628282828", "ivan@gmail.com", "test3");
     app.goTo().gotoAddNew();
     app.contact().create(contact);
     app.goTo().gotoHomePage();

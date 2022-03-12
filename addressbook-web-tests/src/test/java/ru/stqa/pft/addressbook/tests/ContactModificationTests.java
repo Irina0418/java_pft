@@ -1,8 +1,5 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactDate;
@@ -26,7 +23,7 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModification(){
-        Contacts before = app.contact().all();
+      /*  Contacts before = app.contact().all();
         ContactDate modifiedContact = before.iterator().next();
       //  int index= before.size()-1;
         ContactDate contact= new ContactDate (modifiedContact.getId(), "Ivan", "Ivanov", "Moscow", "777-25-27", "89628282828", "petr@gmail.com", null);
@@ -34,15 +31,29 @@ public class ContactModificationTests extends TestBase {
         Contacts after = app.contact().all();
         assertEquals(after.size(), before.size());
 
-        //int indexLast= before.get(before.size()-1).getId();
-      /*   before.remove(modifiedContact);
+        //int indexContact= before.get(before.size()-1).getId();
+      // before.remove(modifiedContact);
         before.add(contact);
-       // before.add(new ContactDate (indexLast,"Ivan", "Ivanov", "Kazan", null, "89628282828", "ivan@gmail.com", "test1"));
-       Comparator<? super ContactDate> byId=(с1, с2) -> Integer.compare(с1.getId(), с2.getId());
-        before.sort(byId);
-        after.sort(byId);*/
         assertEquals(before, after);
-        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));*/
+
+        //исправление задания 9
+        List<ContactDate> before = app.contact().list();
+        app.contact().editContact();
+        ContactDate contact= new ContactDate (before.get(before.size()-1).getId(), "Ivan", "Ivanov", "Moscow", "777-25-27", "89628282828", "petr@gmail.com", null);
+        app.contact().fillContactForm(contact, false);
+        app.contact().updateContact();
+        app.goTo().gotoHomePage();
+        List<ContactDate> after = app.contact().list();
+        assertEquals(after.size(), before.size());
+
+        int index = before.get(before.size()-1).getId();
+        before.remove(before.size()-1);
+        before.add(new ContactDate (index,"Ivan", "Ivanov", "Kazan", null, "89628282828", "ivan@gmail.com", "test1"));
+        Comparator<? super ContactDate> byId=(с1, с2) -> Integer.compare(с1.getId(), с2.getId());
+        before.sort(byId);
+        after.sort(byId);
+        assertEquals(before, after);
     }
 
 
