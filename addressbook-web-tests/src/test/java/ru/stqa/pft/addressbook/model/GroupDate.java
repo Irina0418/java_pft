@@ -1,31 +1,24 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.google.gson.annotations.Expose;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.testng.Assert;
 
 import java.util.HashSet;
 import java.util.Objects;
 
+@XStreamAlias("group")
+
 public class GroupDate {
+    @XStreamOmitField()
     private  int id =Integer.MAX_VALUE;
+    @Expose
     private  String name;
+    @Expose
     private  String header;
+    @Expose
     private  String footer;
-
-
-   /* public GroupDate(int id, String name, String header, String footer) {
-        this.id=id;
-        this.name = name;
-        this.header = header;
-        this.footer = footer;
-    }
-
-    public GroupDate(String name, String header, String footer) {
-        this.id=Integer.MAX_VALUE;
-        this.name = name;
-        this.header = header;
-        this.footer = footer;
-    }*/
-
 
 
     public int getId() {return id;}

@@ -1,48 +1,44 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.google.gson.annotations.Expose;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import java.io.File;
 import java.util.Objects;
 
+@XStreamAlias("contact")
+
 public class ContactDate {
+    @XStreamOmitField()
     private  int id = Integer.MAX_VALUE;
+    @Expose
     private  String firstname;
+    @Expose
     private  String lastname;
+    @Expose
     private  String address;
+    @Expose
     private  String home;
     private  String mobile;
     private  String workPhone;
+    @Expose
     private  String email;
     private  String email2;
     private  String email3;
     private String group;
     private String allPhones;
     private String allEmails;
+    private File photo;
 
-    /*
-    public ContactDate(int id, String firstname, String lastname, String address, String home, String mobile, String email, String group) {
-        this.id=id;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.address = address;
-        this.home = home;
-        this.mobile = mobile;
-        this.email = email;
-        this.group = group;
+
+
+    public ContactDate withPhoto(File photo) {
+        this.photo = photo;
+        return this;
     }
 
-    public ContactDate(String firstname, String lastname, String address, String home, String mobile, String email, String group) {
-        this.id=Integer.MAX_VALUE;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.address = address;
-        this.home = home;
-        this.mobile = mobile;
-        this.email = email;
-        this.group = group;
-    }*/
-
-
-
-    public ContactDate withId(int id) {
+     public ContactDate withId(int id) {
         this.id = id;
         return this;
     }
@@ -158,6 +154,10 @@ public class ContactDate {
 
     public String getEmail3() {
         return email3;
+    }
+
+    public File getPhoto() {
+        return photo;
     }
 
     @Override

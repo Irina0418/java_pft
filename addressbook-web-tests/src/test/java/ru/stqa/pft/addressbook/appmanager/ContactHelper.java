@@ -31,6 +31,7 @@ public class ContactHelper extends HelperBase{
         type(By.name("home"), contactDate.getHome());
         type(By.name("mobile"), contactDate.getMobile());
         type(By.name("email"), contactDate.getEmail());
+        attach(By.name("photo"), contactDate.getPhoto());
 
        if (creation) {
              if (contactDate.getGroup() == wd.findElement(By.name("new_group")).getText()) {
