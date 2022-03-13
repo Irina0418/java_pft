@@ -8,8 +8,10 @@ import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
 
 public class TestBase {
-
-    protected static final ApplicationManager app = new ApplicationManager(BrowserType.FIREFOX);
+    //protected static final String property = System.getProperty("browser", BrowserType.FIREFOX);
+    protected static final ApplicationManager app
+            = new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
+            //(BrowserType.FIREFOX);
 
     @BeforeSuite(alwaysRun = true)
     public void setUp() throws Exception {

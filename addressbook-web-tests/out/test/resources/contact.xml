@@ -6,18 +6,4 @@
     <home>123456789 0</home>
     <email>Email 0</email>
   </contact>
-  <contact>
-    <firstname>Firstname 1</firstname>
-    <lastname>Lastname 1</lastname>
-    <address>Address 1</address>
-    <home>123456789 1</home>
-    <email>Email 1</email>
-  </contact>
-  <contact>
-    <firstname>Firstname 2</firstname>
-    <lastname>Lastname 2</lastname>
-    <address>Address 2</address>
-    <home>123456789 2</home>
-    <email>Email 2</email>
-  </contact>
 </list>
