@@ -3,38 +3,86 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("contact")
-
+@Entity
+@Table (name = "addressbook")
 public class ContactDate {
+    @Id
+    @Column(name="id")
     @XStreamOmitField()
-    private  int id = Integer.MAX_VALUE;
+    private int id = Integer.MAX_VALUE;
+
     @Expose
-    private  String firstname;
+    @Column(name="firstname")
+    private String firstname;
+
     @Expose
-    private  String lastname;
+    @Column(name="lastname")
+    private String lastname;
+
     @Expose
-    private  String address;
+    @Column(name="address")
+    @Type(type="text")
+    private String address;
+
     @Expose
-    private  String home;
-    private  String mobile;
-    private  String workPhone;
+    @Column(name="home")
+    @Type(type="text")
+    private String home;
+
+    @Column(name="mobile")
+    @Type(type="text")
+    private String mobile;
+
+    @Column(name="work")
+    @Type(type="text")
+    private String workPhone;
+
     @Expose
-    private  String email;
+    @Column(name="email")
+    @Type(type="text")
+    private String email;
+
+    @Column(name="email2")
+    @Type(type="text")
     private  String email2;
+
+    @Column(name="email3")
+    @Type(type="text")
     private  String email3;
-    private String group;
+
+    /*@Transient
+    private String group;*/
+
+    @Transient
     private String allPhones;
+
+    @Transient
     private String allEmails;
-    private File photo;
 
+    @Column(name="photo")
+    @Type(type="text")
+    private String photo;
 
+    @Column(name="phone2")
+    @Type(type="text")
+    private String phone2;
+
+    @ManyToMany
+    @JoinTable (name = "address_in_groups", joinColumns = @JoinColumn(name = "id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<GroupDate> groups = new HashSet<GroupDate>();
 
     public ContactDate withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -88,10 +136,10 @@ public class ContactDate {
         return this;
     }
 
-    public ContactDate withGroup(String group) {
+   /* public ContactDate withGroup(String group) {
         this.group = group;
         return this;
-    }
+    }*/
 
     public ContactDate withAllPhones(String allPhones) {
         this.allPhones = allPhones;
@@ -101,6 +149,19 @@ public class ContactDate {
     public ContactDate withAllEmails(String allEmails) {
         this.allEmails = allEmails;
         return this;
+    }
+
+    public ContactDate withPhone2(String phone2) {
+        this.phone2 = phone2;
+        return this;
+    }
+
+     public Groups getGroups() {
+        return new Groups(groups);
+    }
+
+    public String getPhone2() {
+        return phone2;
     }
 
     public String getAllEmails() {
@@ -123,7 +184,6 @@ public class ContactDate {
         return address;
     }
 
-
     public String getHome() {
         return home;
     }
@@ -136,9 +196,12 @@ public class ContactDate {
         return email;
     }
 
-    public String getGroup() {
-        return group;
+    public void setGroups(Set<GroupDate> groups) {
+        this.groups = groups;
     }
+    /* public String getGroup() {
+        return group;
+    }*/
 
     public String getWorkPhone() {
         return workPhone;
@@ -157,7 +220,7 @@ public class ContactDate {
     }
 
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     @Override
@@ -166,6 +229,14 @@ public class ContactDate {
                 "id=" + id +
                 ", firstname='" + firstname + '\'' +
                 ", lastname='" + lastname + '\'' +
+                ", address='" + address + '\'' +
+                ", home='" + home + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", workPhone='" + workPhone + '\'' +
+                ", email='" + email + '\'' +
+                ", email2='" + email2 + '\'' +
+                ", email3='" + email3 + '\'' +
+                ", phone2='" + phone2 + '\'' +
                 '}';
     }
 
@@ -174,13 +245,36 @@ public class ContactDate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContactDate that = (ContactDate) o;
-        return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
+        return id == that.id
+                && Objects.equals(firstname, that.firstname)
+                && Objects.equals(lastname, that.lastname)
+                && Objects.equals(address, that.address)
+                && Objects.equals(home, that.home)
+                && Objects.equals(mobile, that.mobile)
+                && Objects.equals(workPhone, that.workPhone)
+                && Objects.equals(email, that.email)
+                && Objects.equals(email2, that.email2)
+                && Objects.equals(email3, that.email3)
+                && Objects.equals(phone2, that.phone2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname);
+        return Objects.hash(id,
+                firstname,
+                lastname,
+                address,
+                home,
+                mobile,
+                workPhone,
+                email,
+                email2,
+                email3,
+                phone2);
     }
 
-
+    public ContactDate inGroup(GroupDate group) {
+        this.groups.add(group);
+        return this;
+    }
 }

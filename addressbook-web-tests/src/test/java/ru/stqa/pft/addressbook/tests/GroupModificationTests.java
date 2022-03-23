@@ -18,30 +18,34 @@ public class GroupModificationTests extends TestBase{
     @BeforeMethod
     public void ensurePrecondition(){
         app.goTo().groupPage();
-        if(app.group().all().size() == 0){
+        if(app.db().groups().size() == 0){
             app.group().create(new GroupDate().withName("test1"));
         }
     }
 
     @Test
     public void testGroupModification(){
-        Groups before = app.group().all();
-        GroupDate modifiedGroup = before.iterator().next();
-       // int index= before.size()-1;
-        GroupDate group =new GroupDate().withId(modifiedGroup.getId()).withName("test1").withHeader( "test2").withFooter("test3");
-        app.group().modify(group);
-        assertThat(app.group().count(), equalTo(before.size()));
-        Groups after = app.group().all();
-        //assertEquals(after.size(), before.size());
+        Groups before = app.db().groups();
 
-       /* before.remove(modifiedGroup);
-        before.add(group);
-        Comparator<? super GroupDate> byId=(g1,g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
-        Assert.assertEquals(before, after);*/
+        GroupDate modifiedGroup = before.iterator().next();
+        GroupDate group = new GroupDate()
+                .withId(modifiedGroup.getId())
+                .withName("test10")
+                .withHeader("test2")
+                .withFooter("test3");
+
+        app.goTo().groupPage();
+        app.group().modify(group);
+
+        assertThat(app.group().count(), equalTo(before.size()));
+
+        Groups after = app.db().groups();
+
         assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
+        verifyGroupListInUi();
     }
+
+
 
 
 }

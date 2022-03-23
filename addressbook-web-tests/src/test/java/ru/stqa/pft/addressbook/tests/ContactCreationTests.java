@@ -8,6 +8,7 @@ import org.testng.annotations.*;
 import ru.stqa.pft.addressbook.model.ContactDate;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupDate;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,8 +58,8 @@ public class ContactCreationTests extends TestBase{
       XStream xStream = new XStream();
       xStream.processAnnotations(ContactDate.class);
       xStream.allowTypes(new Class[]{ru.stqa.pft.addressbook.model.ContactDate.class});
-      List<ContactDate> contacts = (List<ContactDate>) xStream.fromXML(xml);
 
+      List<ContactDate> contacts = (List<ContactDate>) xStream.fromXML(xml);
       return contacts
               .stream()
               .map((c) -> new Object[]{c})
@@ -87,31 +88,39 @@ public class ContactCreationTests extends TestBase{
   @BeforeMethod
   public void ensurePrecondition() {
     app.goTo().groupPage();
-    if (app.group().all().size() == 0) {
+    if (app.db().groups().size() == 0) {
       app.group().create(new GroupDate().withName("test1"));
 
     }
   }
 
-
-  @Test (dataProvider = "validContactsFromXml")
+  @Test(dataProvider = "validContactsFromXml")
   public void testContactCreation(ContactDate contact) throws Exception {
     Thread.sleep(2000);
+
     app.goTo().gotoHomePage();
-    Contacts before = app.contact().all();
-   // File photo = new File("src/test/resources/photo.jpg");
+
+    Groups groups = app.db().groups();
+
+    Contacts before = app.db().contacts();
+    File photo = new File("src/test/resources/photo.jpg");
+    //ContactDate contactNew = contact.withPhoto(photo).inGroup(groups.iterator().next());
     //ContactDate contact = new ContactDate().withFirstname("Ivan").withLastname("Ivanov").withAddress("Kazan")
-     //       .withMobile("89628282828").withEmail("ivan@gmail.com").withGroup("test3");
+        //    .withMobile("89628282828").withEmail("ivan@gmail.com").withGroup("test3");
     app.goTo().gotoAddNew();
     app.contact().create(contact);
-    app.goTo().gotoHomePage();
-    assertThat(app.contact().count(), equalTo(before.size()+1));
-    Contacts after = app.contact().all();
-    assertThat(after, equalTo(
-            before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
-  }
 
+    app.goTo().gotoHomePage();
+
+    assertThat(app.contact().count(), equalTo(before.size()+1));
+    Contacts after = app.db().contacts();
+
+    assertThat(after, equalTo(
+            before.withAdded(contact
+                    .withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt())
+            )));
   }
+}
 
 
 

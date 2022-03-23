@@ -5,5 +5,12 @@
     <address>Address 0</address>
     <home>123456789 0</home>
     <email>Email 0</email>
+    <mobile></mobile>
+    <email2></email2>
+    <email3></email3>
+    <photo></photo>
+    <phone2></phone2>
+    <workPhone></workPhone>
+    <groups></groups>
   </contact>
 </list>
