@@ -76,7 +76,7 @@ public class ContactDate {
     @Type(type="text")
     private String phone2;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable (name = "address_in_groups", joinColumns = @JoinColumn(name = "id"),
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<GroupDate> groups = new HashSet<GroupDate>();
@@ -199,6 +199,7 @@ public class ContactDate {
     public void setGroups(Set<GroupDate> groups) {
         this.groups = groups;
     }
+
     /* public String getGroup() {
         return group;
     }*/

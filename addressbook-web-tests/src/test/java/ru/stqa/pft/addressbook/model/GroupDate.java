@@ -34,7 +34,6 @@ public class GroupDate {
     @ManyToMany (mappedBy = "groups")
     private Set<ContactDate> contacts = new HashSet<ContactDate>();
 
-
     public int getId() {return id;}
 
     public Set<ContactDate> getContacts() {

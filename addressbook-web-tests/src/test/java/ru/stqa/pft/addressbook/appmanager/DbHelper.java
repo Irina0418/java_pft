@@ -6,10 +6,7 @@ import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import ru.stqa.pft.addressbook.model.ContactDate;
-import ru.stqa.pft.addressbook.model.Contacts;
-import ru.stqa.pft.addressbook.model.GroupDate;
-import ru.stqa.pft.addressbook.model.Groups;
+import ru.stqa.pft.addressbook.model.*;
 
 import java.util.List;
 
@@ -43,5 +40,13 @@ public class DbHelper {
          session.close();
          return new Contacts(result);
      }
-}
 
+    public ListOfContactsInGroup groupsWithContact() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<ContactInGroupData> result = session.createQuery("from ContactInGroupData").list();
+        session.getTransaction().commit();
+        session.close();
+        return new ListOfContactsInGroup(result);
+    }
+}

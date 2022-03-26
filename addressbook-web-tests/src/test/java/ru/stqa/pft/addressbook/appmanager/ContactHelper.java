@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactDate;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupDate;
 import ru.stqa.pft.addressbook.model.Groups;
 
 
@@ -53,16 +54,16 @@ public class ContactHelper extends HelperBase{
     public void deleteSelectedContact() {
        click(By.xpath("//input[@value='Delete']"));
     }
+
     public void acceptDeleteContact(){
         wd.switchTo().alert().accept();
     }
 
     public void editContact() {
         click(By.xpath("//img[@alt='Edit']"));
-
     }
 
-    public void editContact(int id) {
+    public void selectContact(int id) {
         wd.findElement(By.cssSelector(String.format("a[href='edit.php?id=%s']", id))).click();
     }
 
@@ -84,17 +85,27 @@ public class ContactHelper extends HelperBase{
         editContact();
         fillContactForm(contact, false);
         updateContact();
-        contactCache =null;
+        contactCache = null;
         gotoHomePage();
     }
 
-   public void delete(ContactDate contact) {
+    public void addToGroup(ContactDate contact, GroupDate group) {
+        selectContactById(contact.getId());
+        submitAddContactToGroup(group);
+    }
+
+    private void submitAddContactToGroup(GroupDate group) {
+        Select groupElement = new Select(wd.findElement(By.name("to_group")));
+        groupElement.selectByValue(Integer.toString(group.getId()));
+        click(By.name("add"));
+    }
+
+    public void delete(ContactDate contact) {
         selectContactById(contact.getId());
         deleteSelectedContact();
         acceptDeleteContact();
-        contactCache =null;
+        contactCache = null;
         gotoHomePage();
-
     }
 
     private void gotoAddNew() {
@@ -111,7 +122,6 @@ public class ContactHelper extends HelperBase{
 
     public boolean isThereAContact() {
         return isElementPresent(By.name("selected[]"));
-
     }
 
     private Contacts contactCache =null;

@@ -27,7 +27,7 @@ public class ContactModificationTests extends TestBase {
 
     @Test
     public void testContactModification() {
-       /* Contacts before = app.db().contacts();
+        Contacts before = app.db().contacts();
         Groups groups = app.db().groups();
         ContactDate modifiedContact = before.iterator().next();
         ContactDate contact = new ContactDate()
@@ -52,10 +52,10 @@ public class ContactModificationTests extends TestBase {
         Contacts after = app.db().contacts();
         Contacts b = before.without(modifiedContact).withAdded(contact);
 
-        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));*/
+        assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
 
         //исправление задания 9
-       List<ContactDate> before9 = app.contact().list();
+      /* List<ContactDate> before9 = app.contact().list();
         int lastId = before9.get(before9.size()-1).getId();
         app.contact().editContact(lastId);
 
@@ -81,8 +81,9 @@ public class ContactModificationTests extends TestBase {
         Comparator<? super ContactDate> byId=(с1, с2) -> Integer.compare(с1.getId(), с2.getId());
         before9.sort(byId);
         after9.sort(byId);
-        assertEquals(before9, after9);
+        assertEquals(before9, after9);*/
     }
 }
+
 
 
