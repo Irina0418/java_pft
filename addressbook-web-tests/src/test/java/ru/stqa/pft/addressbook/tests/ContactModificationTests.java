@@ -26,7 +26,7 @@ public class ContactModificationTests extends TestBase {
     }
 
     @Test
-    public void testContactModification() {
+    public void testContactModificationNewVersion() {
         Contacts before = app.db().contacts();
         Groups groups = app.db().groups();
         ContactDate modifiedContact = before.iterator().next();
@@ -37,7 +37,6 @@ public class ContactModificationTests extends TestBase {
                 .withAddress("Kazan")
                 .withMobile("89628282828")
                 .withEmail("ivan@gmail.com")
-                //.withGroup("test3")
                 .withPhone2("")
                 .withEmail2("")
                 .withEmail3("")
@@ -53,35 +52,37 @@ public class ContactModificationTests extends TestBase {
         Contacts b = before.without(modifiedContact).withAdded(contact);
 
         assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));
+    }
 
+    @Test
+    public void testContactModification() {
         //исправление задания 9
-      /* List<ContactDate> before9 = app.contact().list();
-        int lastId = before9.get(before9.size()-1).getId();
-        app.contact().editContact(lastId);
+        List<ContactDate> before = app.contact().list();
+        int lastId = before.get(before.size()-1).getId();
+        app.contact().selectContact(lastId);
 
-        ContactDate contact9 =
-                //new ContactDate().withId (before.get(0).getId(), "Ivan", "Ivanov", "Moscow", "777-25-27", "89628282828", "petr@gmail.com", null);
+        ContactDate contact =
                 new ContactDate().withId(lastId).
                         withFirstname("Ivan").
                         withLastname("Ivanov").
                         withAddress("Kazan")
                         .withMobile("89628282828")
                         .withEmail("ivan@gmail.com");
-        app.contact().fillContactForm(contact9, false);
+        app.contact().fillContactForm(contact, false);
         app.contact().updateContact();
 
         app.goTo().gotoHomePage();
-        List<ContactDate> after9 = app.contact().list();
-        assertEquals(after9.size(), before9.size());
+        List<ContactDate> after = app.contact().list();
+        assertEquals(after.size(), before.size());
 
-       // int index = before.get(before.size()-1).getId();
-        before9.remove(before9.size() - 1);
-        before9.add(new ContactDate().withId(lastId).withFirstname("Ivan").withLastname("Ivanov").withAddress("")
+        before.remove(before.size() - 1);
+        before.add(new ContactDate().withId(lastId).withFirstname("Ivan").withLastname("Ivanov").withAddress("")
                 .withMobile("").withEmail(""));
         Comparator<? super ContactDate> byId=(с1, с2) -> Integer.compare(с1.getId(), с2.getId());
-        before9.sort(byId);
-        after9.sort(byId);
-        assertEquals(before9, after9);*/
+        before.sort(byId);
+        after.sort(byId);
+
+        assertEquals(before, after);
     }
 }
 
