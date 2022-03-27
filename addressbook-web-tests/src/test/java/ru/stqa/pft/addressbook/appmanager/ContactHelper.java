@@ -5,17 +5,13 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
-import ru.stqa.pft.addressbook.model.ContactDate;
-import ru.stqa.pft.addressbook.model.Contacts;
-import ru.stqa.pft.addressbook.model.GroupDate;
-import ru.stqa.pft.addressbook.model.Groups;
+import ru.stqa.pft.addressbook.model.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContactHelper extends HelperBase{
-
 
     public ContactHelper(WebDriver wd) {
         super(wd);
@@ -71,6 +67,13 @@ public class ContactHelper extends HelperBase{
         click(By.name("update"));
     }
 
+    private void submitRemoveContactFromGroup() {
+        click(By.name("remove"));
+    }
+
+    private void selectContact() {
+        click(By.name("selected[]"));
+    }
 
     public void create(ContactDate contact) {
         gotoAddNew();
@@ -78,7 +81,6 @@ public class ContactHelper extends HelperBase{
         saveAddress();
         contactCache =null;
         gotoHomePage();
-
     }
 
     public void modify(ContactDate contact) {
@@ -92,6 +94,17 @@ public class ContactHelper extends HelperBase{
     public void addToGroup(ContactDate contact, GroupDate group) {
         selectContactById(contact.getId());
         submitAddContactToGroup(group);
+    }
+
+    public void removeFromGroup(ContactInGroupData toDelete) {
+        selectGroup(toDelete);
+        selectContact();
+        submitRemoveContactFromGroup();
+    }
+
+    private void selectGroup(ContactInGroupData toDelete) {
+        Select selectElement = new Select(wd.findElement(By.name("group")));
+        selectElement.selectByValue(Integer.toString(toDelete.getGroupId()));
     }
 
     private void submitAddContactToGroup(GroupDate group) {
@@ -119,27 +132,27 @@ public class ContactHelper extends HelperBase{
         click(By.linkText("home page"));
     }
 
-
     public boolean isThereAContact() {
         return isElementPresent(By.name("selected[]"));
     }
 
-    private Contacts contactCache =null;
-
+    private Contacts contactCache = null;
 
     public Contacts all() {
-        if (contactCache != null){
+        if (contactCache != null) {
             return new Contacts(contactCache);
         }
+
         contactCache = new Contacts();
         WebElement table = wd.findElement(By.xpath("//table[@id='maintable']"));
         List<WebElement> rows;
         try {
             rows = table.findElements(By.tagName("tr"));
         }
-        catch (Exception e){
+        catch (Exception e) {
             return new Contacts(contactCache);
         }
+
         for(WebElement row:rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
             if (cells.size() == 0) {
@@ -158,15 +171,15 @@ public class ContactHelper extends HelperBase{
             contactCache.add(new ContactDate().withId(id).withFirstname(firstName)
                     .withLastname(lastName).withAddress(address).withAllEmails(allEmails).withAllPhones(allPhones));
         }
+
         return new Contacts(contactCache);
     }
 
-
     //исправление задания 9
     public List<ContactDate> list() {
-
         List<ContactDate> contacts = new ArrayList<ContactDate>();
         WebElement table = wd.findElement(By.xpath("//table[@id='maintable']"));
+
         List<WebElement> rows;
         try {
             rows = table.findElements(By.tagName("tr"));
@@ -174,6 +187,7 @@ public class ContactHelper extends HelperBase{
         catch (Exception e){
             return contacts;
         }
+
         for(WebElement row:rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
             if (cells.size() == 0) {
@@ -187,9 +201,9 @@ public class ContactHelper extends HelperBase{
             String firstName = cells.get(2).getText();
             contacts.add(new ContactDate().withId(id).withFirstname(firstName).withLastname(lastName));
         }
+
         return contacts;
     }
-
 
     public int count() {
         return wd.findElements(By.name("selected[]")).size();

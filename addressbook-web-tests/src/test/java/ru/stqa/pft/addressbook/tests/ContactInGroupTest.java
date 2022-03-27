@@ -24,7 +24,7 @@ public class ContactInGroupTest extends TestBase{
         }
     }
 
-    @Test
+    @Test (enabled = false)
     public void testContactInGroup() {
         ListOfContactsInGroup before = app.db().groupsWithContact();
 
@@ -53,5 +53,28 @@ public class ContactInGroupTest extends TestBase{
         assertThat(after, equalTo(before.withAdded(new ContactInGroupData().withGroupId(groupToAddContactTo.getId()))));
     }
 
+    @Test
+    public void testDeleteContactFromGroup() throws InterruptedException {
+        app.goTo().gotoHomePage();
+        ListOfContactsInGroup before = app.db().groupsWithContact();
 
+        if (before.size() == 0) {
+            ContactDate contactToAddToGroup = app.db().contacts().iterator().next();
+            GroupDate group = app.db().groups().iterator().next();
+
+            app.contact().addToGroup(contactToAddToGroup, group);
+            Thread.sleep(500);
+            before = app.db().groupsWithContact();
+
+            app.goTo().gotoHomePage();
+        }
+
+        ContactInGroupData toDelete = before.iterator().next();
+        app.contact().removeFromGroup(toDelete);
+
+        Thread.sleep(500);
+        ListOfContactsInGroup after = app.db().groupsWithContact();
+
+        assertThat(after, equalTo(before.without(toDelete)));
+    }
 }
